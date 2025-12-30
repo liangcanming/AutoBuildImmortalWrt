@@ -663,14 +663,19 @@ jobs:
           echo -e "\n $extra_content_ip" >> ${{ github.workspace }}/mediatek-filogic/info.md
           
           
+          # 获取中文格式日期：YYYY年MM月DD日
+            echo "RELEASE_DATE_CN=$(date +'%Y年%m月%d日')" >> $GITHUB_ENV
+
+          # 步骤名称：上传ImmortalWrt固件作为发布资源
       - name: Upload ImmortalWrt as release assets
         uses: softprops/action-gh-release@v2.2.1
         with:
           tag_name: ${{ github.event.inputs.profile }}
-          name: ImmortalWrt-Wireless
+          # 使用中文日期格式
+          name: ImmortalWrt-Wireless ${{ env.RELEASE_DATE_CN }}
           body_path: ${{ github.workspace }}/mediatek-filogic/info.md
           files: |
-            ${{ github.workspace }}/bin/targets/${{ env.platform }}/*
+          ${{ github.workspace }}/bin/targets/${{ env.platform }}/*
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
